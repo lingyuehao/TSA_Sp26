@@ -19,7 +19,7 @@ When you have completed the assignment, **Knit** the text and code into a single
 
 Q1. What are your previous experiences with time series analysis, R, and Git? 
 
-> Answer: I have learned time series analysis in the Econ classes before, and I already have more than two years experiences with both R and Git.
+> Answer: I learned time series analysis in the Econ classes before, and I have more than two years experiences with both R and Git.
 
 
 Q2. For this part we just want to see the path to your R project. No need to do anything. The output will be automatically generated once you knit you file. 
