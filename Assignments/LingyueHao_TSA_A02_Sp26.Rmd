@@ -90,7 +90,7 @@ Compute mean and standard deviation for these three series.
 
 ```{r}
 mean_energy <- apply(energy_ts, 2, mean, na.rm = TRUE)
-sd_energy   <- apply(energy_ts, 2, sd,   na.rm = TRUE)
+sd_energy <- apply(energy_ts, 2, sd,na.rm = TRUE)
 
 energy_stats <- data.frame(
   Mean = mean_energy,
@@ -98,7 +98,6 @@ energy_stats <- data.frame(
 )
 
 print(energy_stats)
-
 ```
 
 
@@ -223,6 +222,6 @@ pacf(energy_ts[, "Total Renewable Energy Production"], lag.max = 40,
 pacf(energy_ts[, "Hydroelectric Power Consumption"], lag.max = 40,
      main = "PACF: Hydroelectric Power Consumption")
 ```
-Compared to the ACF plots in Q6, the PACF plots in Q7 look much sparser. In Q6, the ACFs for total biomass and total renewable energy decay very slowly and remain significant across many lags. In contrast, the PACF plots in Q7 show that most significant partial correlations are concentrated at the first few lags, with only occasional spikes afterward. In the hydroelectric power consumption series, the ACF plot shows several significant correlations appearing at different lags. However, in the PACF plot, most of these correlations disappear once earlier lags are accounted for, and only a few lags remain significant. This indicates that the dependence seen in the ACF is largely explained by earlier observations rather than many independent lag effects.
+Compared to Q6, the PACF plots in Q7 are much sparser. In Q6, the ACF shows strong and persistent correlations across many lags, especially for total biomass and total renewable energy. In contrast, the PACF shows that once earlier lags are controlled for, many of these correlations shrink back into the confidence bounds. For hydroelectric power consumption, although the ACF shows several significant correlations across different lags, the PACF suggests that only a limited number of lags have independent effects, with most others being explained by earlier lags.
 
  
