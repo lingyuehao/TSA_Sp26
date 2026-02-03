@@ -10,10 +10,6 @@ editor_options:
   chunk_output_type: console
 ---
 
-```{r}
-
-```
-
 ## Directions
 
 You should open the .rmd file corresponding to this assignment on RStudio. The file is available on our class repository on Github.
@@ -112,7 +108,7 @@ plot_three_clean <- function(x_ts, series_name, lag_max = 36) {
       plot.title = element_text(
         hjust = 0.5,
         size = 12,
-        face = "bold"
+        face = "plain"
       )
     )
 
@@ -123,7 +119,7 @@ plot_three_clean <- function(x_ts, series_name, lag_max = 36) {
       plot.title = element_text(
         hjust = 0.5,
         size = 12,
-        face = "bold"
+        face = "plain"
       )
     )
 
@@ -177,7 +173,9 @@ coef_list <- list(
 coef_list
 ```
 
-**For Total Renewable Energy Production, the intercept (171.45) represents the baseline production level at the start of the sample period. The slope is about 0.75, which means that total renewable energy production increases by roughly 0.75 units per month on average. This shows a clear upward trend over time. For Hydroelectric Power Consumption, the intercept (83.22) represents the baseline level of consumption at the beginning of the sample. The slope is about −0.012, meaning that hydroelectric power consumption decreases slightly by around 0.012 units per month. The decrease is small, but it is consistent over time.**
+**For Total Renewable Energy Production, the intercept (171.45) shows the starting level of production at the beginning of the sample. The slope is about 0.75, which means that total renewable energy production increases by around 0.75 units each month on average. This indicates a clear upward trend over time. The p-value for the slope is smaller than 2e-16, so this increase is statistically significant and very unlikely to be due to random chance.**
+
+**For Hydroelectric Power Consumption, the intercept (83.22) represents the initial level of consumption at the start of the period. The slope is approximately −0.012, meaning that hydroelectric power consumption decreases slightly by about 0.012 units per month. Although the change is small, it is consistent over time. The p-value for the slope is 6.547e−05, which suggests that this downward trend is statistically significant, even though the size of the effect is relatively small.**
 
 
 ### Q4
@@ -225,13 +223,31 @@ plot(ts_hyd_det,
 ### Q5
 
 Plot ACF and PACF for the detrended series and compare with the plots from Q1. You may use plot_grid() again to get them side by side to make it easier to compare. Did the plots change? How?
-```{r}
-p1 <- ggAcf(ts_trp_det, lag.max = 36) + ggtitle("TRP ACF (Detrended)")
-p2 <- ggPacf(ts_trp_det, lag.max = 36) + ggtitle("TRP PACF (Detrended)")
-p3 <- ggAcf(ts_hyd_det, lag.max = 36) + ggtitle("Hydro ACF (Detrended)")
-p4 <- ggPacf(ts_hyd_det, lag.max = 36) + ggtitle("Hydro PACF (Detrended)")
 
-plot_grid(p1, p2, p3, p4, ncol = 2)
+**"TRP" in the plot below stands for Total Renewable Energy Production, "Hydro" in the plot below stands for Hydroelectric Power Consumption.**
+
+```{r}
+p1_o <- ggAcf(trp_ts, lag.max = 36) + ggtitle("TRP ACF (Original)")
+p2_o <- ggPacf(trp_ts, lag.max = 36) + ggtitle("TRP PACF (Original)")
+p3_o <- ggAcf(hyd_ts, lag.max = 36) + ggtitle("Hydro ACF (Original)")
+p4_o <- ggPacf(hyd_ts, lag.max = 36) + ggtitle("Hydro PACF (Original)")
+
+p1_d <- ggAcf(ts_trp_det, lag.max = 36) + ggtitle("TRP ACF (Detrended)")
+p2_d <- ggPacf(ts_trp_det, lag.max = 36) + ggtitle("TRP PACF (Detrended)")
+p3_d <- ggAcf(ts_hyd_det, lag.max = 36) + ggtitle("Hydro ACF (Detrended)")
+p4_d <- ggPacf(ts_hyd_det, lag.max = 36) + ggtitle("Hydro PACF (Detrended)")
+
+plot_grid(
+  p1_o, p2_o,
+  p1_d, p2_d,
+  ncol = 2
+)
+
+plot_grid(
+  p3_o, p4_o,
+  p3_d, p4_d,
+  ncol = 2
+)
 
 ```
 
@@ -245,7 +261,7 @@ Set aside the detrended series and consider the original series again from Q1 to
 
 Just by looking at the time series and the acf plots, do the series seem to have a seasonal trend? No need to run any code to answer your question. Just type in you answer below.
 
-> Answer: From the plots, Hydroelectric Power Consumption shows clear seasonality. The time series has regular repeating ups and downs, and the ACF shows significant spikes at lags 12, 24, and 36, which is consistent with an annual seasonal pattern. In contrast, Total Renewable Energy Production is mainly dominated by a strong upward trend. Its ACF stays high and decays slowly across many lags, so it is not a clear seasonal pattern.
+**> Answer: From the plots, Hydroelectric Power Consumption shows clear seasonality. The time series has regular repeating ups and downs, and the ACF shows significant spikes at lags 12, 24, and 36, which is consistent with an annual seasonal pattern. In contrast, Total Renewable Energy Production is mainly dominated by a strong upward trend. Its ACF stays high and decays slowly across many lags, so it is not a clear seasonal pattern.**
 
 ### Q7
 
@@ -262,7 +278,7 @@ summary(hyd_season_model)
 
 ```
 
-**For Total Renewable Energy Production, none of the monthly dummy variables are statistically significant p-values are very large, so there is no evidence of a seasonal pattern. In contrast, Hydroelectric Power Consumption has many significant monthly dummies and a high R-squared value which shows strong seasonality. These results match my answer to Q6: hydroelectric power shows a clear seasonal trend, while total renewable energy production does not.**
+**For Total Renewable Energy Production, none of the monthly dummy variables are statistically significant: all of their p-values are very large (above 0.05), and the overall F-test also has a high p-value (0.9223). This means we fail to reject the null hypothesis that all monthly effects are zero, so there is no evidence of a seasonal pattern in this series. In contrast, for Hydroelectric Power Consumption, many monthly dummy variables have very small p-values, and the overall F-test is highly significant. This provides strong statistical evidence of seasonality. So hydroelectric power consumption shows a clear seasonal trend, while total renewable energy production does not. These results are consistent with my answer to Q6.**
 
 ### Q8
 
@@ -317,20 +333,40 @@ plot(hyd_deseason_ts, main = "Hydro (Deseasoned)", xlab = "Time", ylab = "")
 
 Plot ACF and PACF for the deseason series and compare with the plots from Q1. You may use plot_grid() again to get them side by side. Did the plots change? How?
 
+**"TRP" in the plot below stands for Total Renewable Energy Production, "Hydro" in the plot below stands for Hydroelectric Power Consumption.**
+
 ```{r}
-p1 <- ggAcf(trp_deseason_ts, lag.max = 36) +
+# TRP
+p1 <- ggAcf(trp_ts, lag.max = 36) +
+  ggtitle("TRP ACF (Original)")
+
+p2 <- ggPacf(trp_ts, lag.max = 36) +
+  ggtitle("TRP PACF (Original)")
+
+p3 <- ggAcf(trp_deseason_ts, lag.max = 36) +
   ggtitle("TRP ACF (Deseasoned)")
 
-p2 <- ggPacf(trp_deseason_ts, lag.max = 36) +
+p4 <- ggPacf(trp_deseason_ts, lag.max = 36) +
   ggtitle("TRP PACF (Deseasoned)")
 
-p3 <- ggAcf(hyd_deseason_ts, lag.max = 36) +
+plot_grid(p1, p2, p3, p4, ncol = 2)
+
+
+# Hydro
+p5 <- ggAcf(hyd_ts, lag.max = 36) +
+  ggtitle("Hydro ACF (Original)")
+
+p6 <- ggPacf(hyd_ts, lag.max = 36) +
+  ggtitle("Hydro PACF (Original)")
+
+p7 <- ggAcf(hyd_deseason_ts, lag.max = 36) +
   ggtitle("Hydro ACF (Deseasoned)")
 
-p4 <- ggPacf(hyd_deseason_ts, lag.max = 36) +
+p8 <- ggPacf(hyd_deseason_ts, lag.max = 36) +
   ggtitle("Hydro PACF (Deseasoned)")
 
-plot_grid(p1, p2, p3, p4, ncol = 2)
+plot_grid(p5, p6, p7, p8, ncol = 2)
+
 
 ```
 
