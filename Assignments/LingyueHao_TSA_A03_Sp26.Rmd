@@ -84,7 +84,7 @@ trp_ts <- ts(as.numeric(two_series_df[["Total Renewable Energy Production"]]),
 
 hyd_ts <- ts(as.numeric(two_series_df[["Hydroelectric Power Consumption"]]),
              start = c(start_year, start_month), frequency = 12)
-
+ 
 ```
 
 ```{r}
