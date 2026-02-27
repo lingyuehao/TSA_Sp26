@@ -281,7 +281,6 @@ autoplot(solar_ts_2014, series = "Original") +
   ylab("Solar Energy Consumption (Trillion Btu)") +
   theme_minimal()
 
-# Compare Wind
 autoplot(wind_ts_2014, series = "Original") +
   autolayer(wind_clean_2014, series = "Cleaned") +
   ggtitle("Wind Energy Comparison (After 2014)") +
