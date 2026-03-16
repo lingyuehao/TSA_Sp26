@@ -2,7 +2,9 @@
 title: "ENV 797 - Time Series Analysis for Energy and Environment Applications | Spring 2026"
 subtitle: "Assignment 7 - Due date 03/06/26"
 author: "Student Name"
-output: pdf_document
+output:
+  pdf_document:
+    latex_engine: xelatex
 geometry: margin=2.54cm
 ---
 
@@ -88,6 +90,7 @@ Run the ADF test and Mann Kendall test on the deseasonalized data from Q2. Repor
 adf_result <- adf.test(gas_deseason)
 adf_result
 
+library(trend)
 mk_result <- mk.test(gas_deseason)
 mk_result
 ```
